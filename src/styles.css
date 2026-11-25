@@ -1,0 +1,658 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --radius-lg: var(--radius);
+}
+
+:root {
+  color-scheme: dark;
+  --bg: #171d3e;
+  --bg-deep: #0a1024;
+  --surface: rgba(245, 247, 239, 0.08);
+  --surface-strong: rgba(245, 247, 239, 0.14);
+  --line: rgba(220, 229, 214, 0.2);
+  --foreground: #f2f6f8;
+  --muted-foreground: rgba(242, 246, 248, 0.72);
+  --faint: rgba(242, 246, 248, 0.54);
+  --green: #42c777;
+  --shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
+  --radius: 8px;
+  --content: min(1120px, calc(100vw - 40px));
+  --background: var(--bg-deep);
+  --primary: var(--foreground);
+  --primary-foreground: var(--bg-deep);
+  --secondary: var(--surface-strong);
+  --secondary-foreground: var(--foreground);
+  --muted: var(--surface);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--green);
+  --destructive: #ff8383;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    linear-gradient(180deg, rgba(10, 16, 36, 0.64), rgba(10, 16, 36, 0.96)),
+    var(--bg-deep);
+  color: var(--foreground);
+  font-family: ui-rounded, "SF Pro Rounded", "SF Pro Display", "Avenir Next", system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  content: "";
+  background:
+    linear-gradient(120deg, rgba(99, 163, 202, 0.22), transparent 34%),
+    linear-gradient(240deg, rgba(66, 199, 119, 0.18), transparent 30%),
+    var(--bg-deep);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+@layer base {
+  a {
+    color: inherit;
+  }
+}
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 10;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 16, 36, 0.74);
+  backdrop-filter: blur(22px);
+}
+
+.nav {
+  width: var(--content);
+  min-height: 68px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.brand img {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.34);
+}
+
+.app-availability {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.home-page .site-header {
+  position: static;
+  background: #111a19;
+  backdrop-filter: none;
+}
+
+.brand:focus-visible,
+.hero-actions a:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+
+.hero {
+  padding: clamp(36px, 4.5vw, 62px) 0;
+  position: relative;
+  isolation: isolate;
+  background: #0c1716;
+  font-family: system-ui, sans-serif;
+}
+
+.hero::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  background:
+    linear-gradient(90deg, #0c1716 8%, rgba(12, 23, 22, 0.94) 35%, rgba(12, 23, 22, 0.3) 100%),
+    linear-gradient(0deg, rgba(12, 23, 22, 0.9), transparent 68%),
+    url("/assets/golf-background.png") center 68% / cover no-repeat;
+}
+
+.hero-inner {
+  width: var(--content);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+  align-items: center;
+  gap: clamp(28px, 6vw, 76px);
+}
+
+.hero-copy {
+  max-width: 570px;
+}
+
+.hero .eyebrow {
+  margin-bottom: 22px;
+  font-weight: 720;
+}
+
+.hero h1 {
+  margin-bottom: 22px;
+  font-size: clamp(3.25rem, 5.6vw, 4.75rem);
+  font-weight: 760;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.hero h1 span {
+  display: block;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+}
+
+.hero-secondary {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  color: #77dda0;
+  font-weight: 680;
+  text-decoration: none;
+  text-underline-offset: 0.22em;
+}
+
+.hero-secondary:hover {
+  text-decoration: underline;
+}
+
+.hero-note {
+  margin: 18px 0 0;
+  color: var(--muted-foreground);
+  font-size: 0.9rem;
+}
+
+.hero-note strong {
+  display: block;
+  color: var(--foreground);
+  font-weight: 650;
+}
+
+.hero-phone {
+  position: relative;
+  width: clamp(245px, 24vw, 294px);
+  aspect-ratio: 862 / 1691;
+  justify-self: center;
+  transform: perspective(1100px) rotateY(-15deg) rotateZ(-1.5deg);
+  filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.57));
+}
+
+/* Figure's fitted frame uses two slices of the same asset to shorten the straight sides. */
+.hero-phone-screen {
+  position: absolute;
+  inset: 3.25% 8% 3.73%;
+  display: flex;
+  align-items: end;
+  overflow: hidden;
+  border-radius: 11% / 5%;
+  background: #080c10;
+}
+
+.hero-phone-screen img {
+  width: 100%;
+  height: auto;
+}
+
+.hero-phone-frame {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.hero-phone-frame-top {
+  top: 0;
+  clip-path: inset(0 0 calc(50.684932% - 1px) 0);
+}
+
+.hero-phone-frame-bottom {
+  bottom: 0;
+  clip-path: inset(56.657534% 0 0 0);
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 20px;
+  max-width: 850px;
+  font-size: clamp(3.1rem, 9vw, 7.8rem);
+  line-height: 0.9;
+  letter-spacing: 0;
+}
+
+.lead {
+  max-width: 36rem;
+  margin-bottom: 28px;
+  color: rgba(242, 246, 248, 0.88);
+  font-size: clamp(1.06rem, 1.8vw, 1.25rem);
+}
+
+.actions {
+  margin-top: 34px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.section {
+  padding: clamp(42px, 6vw, 78px) 0;
+}
+
+.section.alt {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent),
+    rgba(255, 255, 255, 0.02);
+}
+
+.video-section {
+  padding-top: 24px;
+}
+
+.section-inner {
+  width: var(--content);
+  margin: 0 auto;
+}
+
+.section h2 {
+  margin-bottom: 14px;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.08;
+}
+
+#features h2 {
+  margin-bottom: clamp(24px, 3vw, 32px);
+}
+
+.page-title h1 {
+  margin-bottom: 14px;
+  font-size: clamp(2rem, 4.5vw, 4.4rem);
+  line-height: 0.98;
+}
+
+.section p,
+.page-title p,
+.body-copy p {
+  color: var(--muted-foreground);
+  font-size: 1.08rem;
+}
+
+.section p {
+  max-width: 52ch;
+  margin-bottom: 0;
+}
+
+.video-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: center;
+}
+
+.video-frame {
+  /* Match the portrait clip at its height cap, including the frame's padding and border. */
+  width: min(100%, 420px, calc(74svh * 468 / 960 + 26px));
+  justify-self: center;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background:
+    linear-gradient(160deg, rgba(99, 163, 202, 0.18), transparent 48%),
+    rgba(245, 247, 239, 0.08);
+  box-shadow: var(--shadow);
+}
+
+.video-frame video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 468 / 960;
+  max-height: 74svh;
+  border-radius: 6px;
+  background: #07101b;
+}
+
+#shot-map-video {
+  scroll-margin-block-start: 20px;
+}
+
+.experience-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 48px);
+}
+
+.experience-card {
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.experience-card h3 {
+  margin-bottom: 6px;
+  font-size: 1.3rem;
+}
+
+.support-card {
+  min-height: 180px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.14);
+}
+
+.support-card h2 {
+  margin-bottom: 10px;
+  font-size: 1.15rem;
+}
+
+.support-card p,
+.support-card li {
+  color: var(--muted-foreground);
+}
+
+.page-main {
+  padding: 132px 0 80px;
+}
+
+.page-title {
+  width: var(--content);
+  margin: 0 auto 40px;
+  max-width: var(--content);
+}
+
+.page-grid {
+  width: var(--content);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.page-grid.single {
+  grid-template-columns: minmax(0, 760px);
+}
+
+.support-card ul {
+  margin: 12px 0 0;
+  padding-left: 20px;
+}
+
+.body-copy {
+  width: min(760px, var(--content));
+  margin: 0 auto;
+}
+
+.privacy-notice {
+  max-width: 680px;
+}
+
+.privacy-notice header {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.privacy-notice h1 {
+  margin-bottom: 10px;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 1.08;
+}
+
+.privacy-notice .notice-date {
+  margin-bottom: 20px;
+  font-size: 0.94rem;
+}
+
+.privacy-notice section {
+  margin-top: 28px;
+}
+
+.privacy-notice h2 {
+  margin-bottom: 8px;
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+.privacy-notice p {
+  margin-bottom: 12px;
+  line-height: 1.65;
+}
+
+.privacy-notice p:last-child {
+  margin-bottom: 0;
+}
+
+.contact-link {
+  color: var(--green);
+  font-weight: 850;
+  text-decoration: none;
+}
+
+.privacy-notice a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
+}
+
+.privacy-notice a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 30px 0;
+  background: rgba(10, 16, 36, 0.72);
+}
+
+.footer-inner {
+  width: var(--content);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  color: var(--faint);
+  font-size: 0.94rem;
+}
+
+.footer-legal,
+.footer-legal-links,
+.footer-product {
+  display: flex;
+  align-items: center;
+}
+
+.footer-legal,
+.footer-product {
+  flex-wrap: wrap;
+}
+
+.footer-legal,
+.footer-legal-links {
+  gap: 0 8px;
+}
+
+.footer-legal small {
+  font-size: inherit;
+}
+
+.footer-product {
+  gap: 0 16px;
+}
+
+.footer-inner a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  text-underline-offset: 0.25em;
+}
+
+.footer-inner a:hover,
+.footer-inner a:focus-visible {
+  color: var(--foreground);
+  text-decoration: underline;
+}
+
+.footer-inner a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (max-width: 860px) {
+  .site-header {
+    position: sticky;
+  }
+
+  .nav {
+    min-height: 64px;
+    padding-block: 8px;
+  }
+
+  .page-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer {
+    padding-block: 20px;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+  }
+
+  .footer-legal,
+  .footer-product {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 700px) {
+  .hero {
+    padding: 42px 0 50px;
+  }
+
+  .hero::before {
+    background:
+      linear-gradient(180deg, #0c1716 12%, rgba(12, 23, 22, 0.88) 40%, rgba(12, 23, 22, 0.38) 75%, #0c1716),
+      url("/assets/golf-background.png") center bottom / cover no-repeat;
+  }
+
+  .hero-inner {
+    gap: 38px;
+  }
+
+  .hero-phone {
+    width: min(67vw, 294px);
+  }
+
+  .hero-inner,
+  .video-layout,
+  .experience-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  :root {
+    --content: min(100vw - 28px, 1120px);
+  }
+
+  .brand img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 11vw, 3.25rem);
+  }
+
+  .actions {
+    display: grid;
+  }
+
+  .page-main {
+    padding-block: 58px;
+  }
+
+  .footer-inner {
+    font-size: 0.875rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-page {
+    scroll-behavior: auto;
+  }
+}
