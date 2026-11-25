@@ -19,8 +19,8 @@ export function renderPage(page: Page) {
   );
 
   // Cloudflare consumes these comments to preserve the native mailto links.
-  return markup.replace(
-    /<a\b[^>]* href="mailto:support@tvr\.works"[^>]*>[^<]*<\/a>/g,
+  return markup.replaceAll(
+    /<a\b[^>]* href="mailto:support@tvr\.works"[^>]*>[^<]*<\/a>/gu,
     "<!--email_off-->$&<!--/email_off-->",
   );
 }

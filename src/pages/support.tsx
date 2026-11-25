@@ -2,7 +2,7 @@ import { buttonVariants } from "../components/ui/button.tsx";
 
 export function SupportPage() {
   return (
-    <main className="page-main">
+    <main className="py-14 short-landscape:py-6">
       <section className="page-title">
         <p className="eyebrow">Support</p>
         <h1>Help for GolfTally.</h1>
@@ -49,9 +49,9 @@ export function SupportPage() {
         <article className="support-card">
           <h2>Where is my data stored?</h2>
           <p>
-            Round data is stored on the device and can sync through the user's
-            private iCloud storage when iCloud is enabled. GolfTally does not
-            run a separate developer-hosted user database.
+            Round data is stored on the device and can sync through the{" "}
+            {"user's"} private iCloud storage when iCloud is enabled. GolfTally
+            does not run a separate developer-hosted user database.
           </p>
         </article>
 

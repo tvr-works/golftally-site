@@ -9,12 +9,17 @@ Use the Node version in `.node-version` and the npm version in `package.json`.
 ```sh
 npm ci
 npm run dev
+npm run lint
 npm run build
 npm test
 npm run preview
 ```
 
 The build writes `dist/`. Vite renders the route entries through `src/render-page.tsx`, with the shared header and footer in `src/components/site-layout.tsx`. Public assets live in `public/assets/`. Keep the Cloudflare email directives around the rendered `mailto:` links so they remain usable without JavaScript.
+
+`npm run lint` runs Oxlint and the shadcn design-system rules from `.oxlintrc.json`. The build runs the same check for GitHub CI and Cloudflare Pages.
+
+The development-only shadcn CLI uses a scoped `minimatch` override until its dependency chain resolves a patched version. [Advisory](https://github.com/advisories/GHSA-g3hv-75wg-m249)
 
 ## Publishing
 

@@ -11,7 +11,7 @@ export function SiteLayout({
 }) {
   return (
     <>
-      <header className="site-header">
+      <header className="site-header sticky top-0 z-10">
         <div className="nav">
           <a className="brand" href="/" aria-label="GolfTally home">
             <img src="/assets/golf-tally-icon.png" alt="" />

@@ -97,6 +97,14 @@ export function HomePage() {
               Follow the numbered shots to the green. The demo then switches
               holes and selects a shot to show its yardage.
             </p>
+            <div className="mt-2 hidden short-landscape:block">
+              <a
+                className={buttonVariants({ variant: "link" })}
+                href="/assets/shot-map-demo.mp4"
+              >
+                Open video
+              </a>
+            </div>
           </div>
           <div className="video-frame">
             <video

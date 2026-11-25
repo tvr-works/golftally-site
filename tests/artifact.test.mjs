@@ -31,47 +31,51 @@ for (const route of routes) {
     assert.ok(html.includes(route.heading));
     assert.match(
       html,
-      /<header class="site-header">.*?<span class="app-availability">Coming soon<\/span><\/div><\/header>/s,
+      /<header class="site-header\b[^"]*">.*?<span class="app-availability">Coming soon<\/span><\/div><\/header>/su,
     );
     assert.match(
       html,
-      /<a class="brand" href="\/" aria-label="GolfTally home">/,
+      /<a class="brand" href="\/" aria-label="GolfTally home">/u,
     );
     assert.ok(html.includes(`rel="canonical" href="${origin}${route.path}"`));
     assert.match(
       html,
-      /<footer\b.*?© 2026 TVR Works LLC.*?<a href="\/privacy"[^>]*>Privacy<\/a>.*?<a href="\/support"[^>]*>Support<\/a>.*?<\/footer>/s,
+      /<footer\b.*?© 2026 TVR Works LLC.*?<a href="\/privacy"[^>]*>Privacy<\/a>.*?<a href="\/support"[^>]*>Support<\/a>.*?<\/footer>/su,
     );
     assert.equal(
       [
         ...html.matchAll(
-          /<!--email_off--><a\b[^>]* href="mailto:support@tvr\.works"[^>]*>[^<]*<\/a><!--\/email_off-->/g,
+          /<!--email_off--><a\b[^>]* href="mailto:support@tvr\.works"[^>]*>[^<]*<\/a><!--\/email_off-->/gu,
         ),
       ].length,
       route.emailLinks,
     );
     assert.doesNotMatch(
       html,
-      /<(?:script\b|link\b[^>]*rel="modulepreload")|<!--page-content-->/,
+      /<(?:script\b|link\b[^>]*rel="modulepreload")|<!--page-content-->/u,
     );
     assert.equal(
       html.includes('name="robots" content="noindex, nofollow"'),
       build.mode === "preview",
     );
 
-    const stylesheet = html.match(/href="(\/assets\/[^"]+\.css)"/)?.[1];
+    const stylesheet = html.match(/href="(\/assets\/[^"]+\.css)"/u)?.[1];
     assert.ok(stylesheet);
     assert.ok((await stat(new URL(stylesheet.slice(1), output))).size > 0);
 
     if (route.path === "/") {
       assert.match(
         html,
-        /<a\b[^>]* href="#shot-map-video">Watch the demo<\/a>/,
+        /<a\b[^>]* href="#shot-map-video">Watch the demo<\/a>/u,
       );
-      assert.match(html, /<a\b[^>]* href="#features">Explore features<\/a>/);
+      assert.match(html, /<a\b[^>]* href="#features">Explore features<\/a>/u);
       assert.match(
         html,
-        /<video id="shot-map-video" controls=""[^>]*><source src="\/assets\/shot-map-demo\.mp4" type="video\/mp4"/,
+        /<a\b[^>]* href="\/assets\/shot-map-demo\.mp4">Open video<\/a>/u,
+      );
+      assert.match(
+        html,
+        /<video id="shot-map-video" controls=""[^>]*><source src="\/assets\/shot-map-demo\.mp4" type="video\/mp4"/u,
       );
     } else {
       assert.ok(html.includes(`href="${route.path}" aria-current="page"`));
@@ -81,7 +85,7 @@ for (const route of routes) {
 
 test("includes only the site assets and a stylesheet in the public assets directory", async () => {
   const assets = await readdir(new URL("assets/", output));
-  assert.deepEqual(assets.filter((name) => !name.endsWith(".css")).sort(), [
+  assert.deepEqual(assets.filter((name) => !name.endsWith(".css")).toSorted(), [
     "golf-background.png",
     "golf-tally-icon.png",
     "phone-frame.webp",
@@ -89,10 +93,12 @@ test("includes only the site assets and a stylesheet in the public assets direct
     "shot-map-demo.mp4",
   ]);
   assert.equal(assets.filter((name) => name.endsWith(".css")).length, 1);
-  for (const name of assets) {
-    const { size } = await stat(new URL(`assets/${name}`, output));
-    assert.ok(size > 0 && size <= 25 * 1024 * 1024, name);
-  }
+  await Promise.all(
+    assets.map(async (name) => {
+      const { size } = await stat(new URL(`assets/${name}`, output));
+      assert.ok(size > 0 && size <= 25 * 1024 * 1024, name);
+    }),
+  );
 });
 
 test("identifies the expected build and excludes previews from indexing", () => {
@@ -108,5 +114,5 @@ test("identifies the expected build and excludes previews from indexing", () => 
     headers.includes("X-Robots-Tag: noindex, nofollow"),
     build.mode === "preview",
   );
-  assert.match(headers, /\/build-info\.json\n  Cache-Control: no-store/);
+  assert.match(headers, /\/build-info\.json\n  Cache-Control: no-store/u);
 });

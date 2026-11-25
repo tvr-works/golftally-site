@@ -1,6 +1,6 @@
 export function PrivacyPage() {
   return (
-    <main className="page-main">
+    <main className="py-14 short-landscape:py-6">
       <article className="body-copy privacy-notice">
         <header>
           <h1>GolfTally privacy</h1>
