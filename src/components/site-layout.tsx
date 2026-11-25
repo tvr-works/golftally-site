@@ -16,7 +16,9 @@ export function SiteLayout({
             <img src="/assets/golf-tally-icon.png" alt="" />
             <span>GolfTally</span>
           </a>
-          <span className="app-availability">Coming soon</span>
+          {page !== "home" && (
+            <span className="app-availability">Coming soon</span>
+          )}
         </div>
       </header>
 

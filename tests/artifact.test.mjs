@@ -29,12 +29,10 @@ for (const route of routes) {
   test(`prerenders ${route.path} with the shared header, footer and public links`, async () => {
     const html = await readFile(new URL(route.file, output), "utf8");
     assert.ok(html.includes(route.heading));
+    const header = html.match(/<header class="site-header\b[^"]*">.*?<\/header>/su)?.[0];
+    assert.ok(header);
     assert.match(
-      html,
-      /<header class="site-header\b[^"]*">.*?<span class="app-availability">Coming soon<\/span><\/div><\/header>/su,
-    );
-    assert.match(
-      html,
+      header,
       /<a class="brand" href="\/" aria-label="GolfTally home">/u,
     );
     const canonical = origin + route.path;
@@ -79,21 +77,28 @@ for (const route of routes) {
         name: "GolfTally",
         url: canonical,
       });
+      assert.doesNotMatch(header, /Coming soon/u);
       assert.match(
         html,
-        /<a\b[^>]* href="#shot-map-video">Watch the demo<\/a>/u,
+        /<button(?=[^>]* aria-disabled="true")(?=[^>]* aria-describedby="download-status")[^>]*>Download<\/button>/u,
       );
-      assert.match(html, /<a\b[^>]* href="#features">Explore features<\/a>/u);
+      assert.match(html, /<span id="download-status"[^>]*>Coming soon<\/span>/u);
+      assert.doesNotMatch(html, /Watch the demo|Explore features/u);
       assert.match(
         html,
-        /<a\b[^>]* href="\/assets\/shot-map-demo\.mp4">Open video<\/a>/u,
+        /<a\b[^>]* href="\/assets\/shot-map-demo\.mp4"[^>]*>Open video<\/a>/u,
       );
       assert.match(
         html,
-        /<video id="shot-map-video" controls=""[^>]*><source src="\/assets\/shot-map-demo\.mp4" type="video\/mp4"/u,
+        /<video id="scorecard-video" controls=""[^>]* poster="\/assets\/scorecard-demo-poster\.webp"[^>]*><source src="\/assets\/scorecard-demo\.mp4" type="video\/mp4"/u,
+      );
+      assert.match(
+        html,
+        /<video id="shot-map-video" controls=""[^>]* poster="\/assets\/shot-map-demo-poster\.webp"[^>]*><source src="\/assets\/shot-map-demo\.mp4" type="video\/mp4"/u,
       );
     } else {
       assert.equal(siteName, undefined);
+      assert.match(header, /<span class="app-availability">Coming soon<\/span>/u);
       assert.ok(html.includes(`href="${route.path}" aria-current="page"`));
     }
   });
@@ -105,9 +110,13 @@ test("includes only the site assets and a stylesheet in the public assets direct
     "golf-background.png",
     "golf-tally-icon.png",
     "phone-frame.webp",
+    "scorecard-demo-poster.webp",
+    "scorecard-demo.mp4",
     "shot-map-demo-poster.png",
+    "shot-map-demo-poster.webp",
     "shot-map-demo.mp4",
     "social-card.jpg",
+    "watch-on-course.webp",
   ]);
   assert.equal(assets.filter((name) => name.endsWith(".css")).length, 1);
   await Promise.all(
