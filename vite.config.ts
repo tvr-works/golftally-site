@@ -1,14 +1,12 @@
 import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, type Plugin } from "vite";
-import type { Page } from "./src/components/site-layout.tsx";
-import { renderPage } from "./src/render-page.tsx";
+import { renderMetadata, renderPage } from "./src/render-page.tsx";
+import { siteOrigin, sitePages, type Page } from "./src/site.ts";
 
-const entries = {
-  home: "index.html",
-  privacy: "privacy.html",
-  support: "support.html",
-} satisfies Record<Page, string>;
+const entries = Object.fromEntries(
+  Object.entries(sitePages).map(([page, { file }]) => [page, file]),
+);
 
 const production = process.env.SITE_DEPLOYMENT_MODE === "production";
 
@@ -21,15 +19,9 @@ function staticPages(): Plugin {
       );
       if (!page) return html;
 
-      const document = html.replace("<!--page-content-->", () =>
-        renderPage(page),
-      );
-      return production
-        ? document
-        : document.replace(
-            "</head>",
-            '  <meta name="robots" content="noindex, nofollow">\n  </head>',
-          );
+      return html
+        .replace("<!--page-metadata-->", () => renderMetadata(page))
+        .replace("<!--page-content-->", () => renderPage(page));
     },
     generateBundle() {
       const identity = {
@@ -39,19 +31,43 @@ function staticPages(): Plugin {
           process.env.CF_PAGES_BRANCH ?? process.env.GITHUB_REF_NAME ?? null,
         mode: production ? "production" : "preview",
       };
-      const headers = production
-        ? ""
-        : "/*\n  X-Robots-Tag: noindex, nofollow\n\n";
       this.emitFile({
         type: "asset",
         fileName: "_headers",
-        source: headers + "/build-info.json\n  Cache-Control: no-store\n",
+        source:
+          "/*\n  ! X-Robots-Tag\n\n/build-info.json\n  Cache-Control: no-store\n",
       });
       this.emitFile({
         type: "asset",
         fileName: "build-info.json",
         source: JSON.stringify(identity) + "\n",
       });
+      const sitemapUrl = siteOrigin + "/sitemap.xml";
+      this.emitFile({
+        type: "asset",
+        fileName: "robots.txt",
+        source:
+          "User-agent: *\nAllow: /\n" +
+          (production ? "Sitemap: " + sitemapUrl + "\n" : ""),
+      });
+      if (production) {
+        const urls = Object.values(sitePages).flatMap(({ path }) =>
+          path === null
+            ? []
+            : ["  <url><loc>" + siteOrigin + path + "</loc></url>"],
+        );
+        this.emitFile({
+          type: "asset",
+          fileName: "sitemap.xml",
+          source: [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+            ...urls,
+            "</urlset>",
+            "",
+          ].join("\n"),
+        });
+      }
     },
   };
 }

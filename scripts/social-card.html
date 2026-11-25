@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>GolfTally social card</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        color: #f2f6f8;
+        font-family: system-ui, sans-serif;
+      }
+      .card {
+        width: 1200px;
+        height: 630px;
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        align-items: center;
+        overflow: hidden;
+        padding: 0 104px 0 76px;
+        background:
+          linear-gradient(90deg, #0c1716 8%, rgba(12, 23, 22, 0.94) 35%, rgba(12, 23, 22, 0.3) 100%),
+          linear-gradient(0deg, rgba(12, 23, 22, 0.9), transparent 68%),
+          url("/assets/golf-background.png") center 68% / cover no-repeat, #0c1716;
+      }
+      .card-brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 30px;
+        font-weight: 750;
+      }
+      .card-brand img { border-radius: 10px; }
+      h1 {
+        margin: 28px 0;
+        font-size: 78px;
+        font-weight: 760;
+        line-height: 1.02;
+        letter-spacing: -0.045em;
+      }
+      .card-platforms {
+        margin: 0;
+        color: #a4e9bb;
+        font-size: 26px;
+        font-weight: 650;
+      }
+      .card-phone {
+        position: relative;
+        width: 248px;
+        aspect-ratio: 862 / 1691;
+        justify-self: center;
+        transform: perspective(1100px) rotateY(-15deg) rotateZ(-1.5deg);
+        filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.57));
+      }
+      .card-screen {
+        position: absolute;
+        inset: 3.25% 8% 3.73%;
+        display: flex;
+        align-items: end;
+        overflow: hidden;
+        border-radius: 11% / 5%;
+        background: #080c10;
+      }
+      .card-screen img, .card-frame { width: 100%; height: auto; }
+      .card-frame { position: absolute; left: 0; }
+      .card-frame-top { top: 0; clip-path: inset(0 0 calc(50.684932% - 1px) 0); }
+      .card-frame-bottom { bottom: 0; clip-path: inset(56.657534% 0 0 0); }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <div>
+        <div class="card-brand">
+          <img src="/assets/golf-tally-icon.png" width="52" height="52" alt="">
+          GolfTally
+        </div>
+        <h1>Golf scoring.<br>Kept simple.</h1>
+        <p class="card-platforms">iPhone · Apple Watch · Live Activities</p>
+      </div>
+      <div class="card-phone">
+        <div class="card-screen">
+          <img src="/assets/shot-map-demo-poster.png" width="584" height="1200" alt="GolfTally’s shot map on iPhone">
+        </div>
+        <img class="card-frame card-frame-top" src="/assets/phone-frame.webp" width="862" height="1825" alt="">
+        <img class="card-frame card-frame-bottom" src="/assets/phone-frame.webp" width="862" height="1825" alt="">
+      </div>
+    </main>
+  </body>
+</html>

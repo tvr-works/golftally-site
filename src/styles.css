@@ -1,6 +1,7 @@
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
+@source not "../scripts";
 
 @custom-variant short-landscape (@media (orientation: landscape) and (max-height: 30rem));
 

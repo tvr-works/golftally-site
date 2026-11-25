@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-
-export type Page = "home" | "privacy" | "support";
+import type { Page } from "../site.ts";
 
 export function SiteLayout({
   page,
